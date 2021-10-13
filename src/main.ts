@@ -12,7 +12,7 @@ async function boostrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: `${process.env.HOSTNAME}:${process.env.PORT}`,
+        url: `${process.env.CNAME}:${process.env.PORT}`,
         package: 'user',
         protoPath: join(__dirname, 'proto', 'user.proto'),
       },
