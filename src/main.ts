@@ -21,11 +21,16 @@ async function boostrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true }); // cho phep class-validator dung nestjs dependance injection
-  await app.listen().then(() => {
-    console.log('app start');
+  await app
+    .listen()
+    .then(() => {
+      console.log('app start');
 
-    console.log(`${process.env.URL}:${process.env.PORT}`);
-  });
+      console.log(`${process.env.URL}:${process.env.PORT}`);
+    })
+    .catch((err) => {
+      console.log('loi cmnr', err);
+    });
 }
 
 boostrap();
