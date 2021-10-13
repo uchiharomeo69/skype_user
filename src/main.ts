@@ -12,7 +12,7 @@ async function boostrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: `0.0.0.0:5000`,
+        url: `${process.env.HOST}:${process.env.PORT}`,
         package: 'user',
         protoPath: join(__dirname, 'proto', 'user.proto'),
       },
@@ -25,6 +25,7 @@ async function boostrap() {
     .listen()
     .then(() => {
       console.log('app start');
+      console.log(`${process.env.HOST}:${process.env.PORT}`);
     })
     .catch((err) => {
       console.log('loi cmnr', err);
