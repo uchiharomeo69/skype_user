@@ -12,6 +12,7 @@ async function boostrap() {
     {
       transport: Transport.GRPC,
       options: {
+        url: `skype-user.herokuapp.com`,
         package: 'user',
         protoPath: join(__dirname, 'proto', 'user.proto'),
       },
