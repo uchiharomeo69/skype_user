@@ -12,7 +12,7 @@ async function boostrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: `skype-user.herokuapp.com`,
+        url: `${process.env.URL}:${process.env.PORT}`,
         package: 'user',
         protoPath: join(__dirname, 'proto', 'user.proto'),
       },
@@ -21,7 +21,11 @@ async function boostrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true }); // cho phep class-validator dung nestjs dependance injection
-  await app.listen();
+  await app.listen().then(() => {
+    console.log('app start');
+
+    console.log(`${process.env.URL}:${process.env.PORT}`);
+  });
 }
 
 boostrap();
