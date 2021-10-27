@@ -1,9 +1,11 @@
 import {
   ArgumentMetadata,
+  HttpException,
   Injectable,
   PipeTransform,
   ValidationError,
 } from '@nestjs/common';
+
 import { RpcException } from '@nestjs/microservices';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -24,7 +26,7 @@ export class ValidationPipe implements PipeTransform<any> {
         if (ename) message += err.constraints[ename];
       }
 
-      throw new RpcException(message);
+      throw new HttpException(message, 400);
     }
     return value;
   }

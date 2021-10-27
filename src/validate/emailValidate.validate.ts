@@ -1,11 +1,12 @@
-import { UserService } from './../user/user.service';
+import { HttpException, Injectable } from '@nestjs/common';
 import {
   ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { Injectable } from '@nestjs/common';
+
 import { RpcException } from '@nestjs/microservices';
+import { UserService } from './../user/user.service';
 
 @ValidatorConstraint({ name: 'UserExist', async: true })
 @Injectable()
@@ -16,10 +17,14 @@ export class EmailValidate implements ValidatorConstraintInterface {
     if (user) return false;
     return true;
   }
+
   defaultMessage?(validationArguments?: ValidationArguments): string {
-    throw new RpcException({
-      message: 'Email already exist',
-      code: 6,
-    });
+    throw new HttpException(
+      {
+        message: 'Email already exist',
+        code: 401,
+      },
+      401,
+    );
   }
 }

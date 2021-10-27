@@ -18,17 +18,26 @@ async function boostrap() {
     },
   );
 
-  app.useGlobalPipes(new ValidationPipe());
+  //app.useGlobalPipes(new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true }); // cho phep class-validator dung nestjs dependance injection
   await app
     .listen()
     .then(() => {
       console.log('app start');
-      console.log(`${process.env.HOST}:${process.env.PORT}`);
     })
     .catch((err) => {
       console.log('loi cmnr', err);
     });
 }
+async function bootstrap2() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.enableCors();
+  await app.listen(process.env.PORT || 8082).then(() => {
+    console.log(`server start at ${process.env.PORT || 8082}`);
+  });
+}
 
+bootstrap2();
 boostrap();

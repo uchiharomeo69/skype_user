@@ -1,7 +1,7 @@
-import { EmailValidate } from './../../validate/emailValidate.validate';
 import { IsEmail, IsNotEmpty, Length, Validate } from 'class-validator';
+
+import { EmailValidate } from './../../validate/emailValidate.validate';
 import { PasswordValidate } from 'src/validate/passwordValidate.validate';
-import { UseFilters } from '@nestjs/common';
 
 export class CreateUser {
   @IsEmail()

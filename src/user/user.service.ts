@@ -1,7 +1,12 @@
 import { LoginUser } from './dto/loginUser.dto';
 import { ClientProxy, GrpcMethod, RpcException } from '@nestjs/microservices';
 import { CreateUser } from './dto/createUser.DTO';
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  HttpException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { User } from './interfaces/user.interface';
@@ -83,24 +88,30 @@ export class UserService {
   }
 
   async login(loginUser: LoginUser) {
+    const { email, password } = loginUser;
     let user: User = await this.userModel.findOne({
-      ...loginUser,
-      active: true,
+      email,
+      password,
     });
 
-    if (user)
-      return {
-        token: this.jwtService.sign(
-          { _id: user._id },
-          {
-            expiresIn: 6000,
-          },
-        ),
-      };
-    throw new RpcException({
-      message: 'Wrong email or password or account is not actived',
-      code: 3,
-    });
+    if (!user) {
+      throw new ForbiddenException({
+        message: 'Wrong email or password or account is not actived',
+        code: 403,
+      });
+    }
+    return {
+      token: this.jwtService.sign(
+        { _id: user._id },
+        {
+          expiresIn: 6000,
+        },
+      ),
+    };
+    // throw new RpcException({
+    //   message: 'Wrong email or password or account is not actived',
+    //   code: 3,
+    // });
   }
 
   async getUser(token: string) {
@@ -112,10 +123,12 @@ export class UserService {
       );
       return { _id, email, name, role, avatar };
     } catch (error) {
-      throw new RpcException({
-        message: error.message,
-        code: 3,
-      });
+      // throw new RpcException({
+      //   message: error.message,
+      //   code: 3,
+      // });
+
+      throw new HttpException({ message: error.message, code: 401 }, 401);
     }
   }
 
@@ -126,10 +139,13 @@ export class UserService {
       );
       return { _id, email, name, role, avatar };
     } catch (error) {
-      throw new RpcException({
-        message: error.message,
-        code: 3,
-      });
+      throw new HttpException(
+        {
+          message: error.message,
+          code: 401,
+        },
+        401,
+      );
     }
   }
 
@@ -141,6 +157,6 @@ export class UserService {
         $set: { active: true },
       });
     }
-    throw new RpcException('Can not active your account');
+    throw new HttpException('Can not active your account', 401);
   }
 }

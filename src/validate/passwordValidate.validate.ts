@@ -1,10 +1,10 @@
+import { HttpException, Injectable } from '@nestjs/common';
 import {
   ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 
 @ValidatorConstraint({ async: false })
@@ -25,6 +25,9 @@ export class PasswordValidate implements ValidatorConstraintInterface {
     return false;
   }
   defaultMessage?(validationArguments?: ValidationArguments): string {
-    throw new RpcException('invalid password');
+    throw new HttpException(
+      'password must have at least 1 uppercase , 1 lowercase and 1 digit',
+      401,
+    );
   }
 }

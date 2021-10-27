@@ -26,7 +26,6 @@ import { UserService } from './user.service';
           return {
             transport: Transport.RMQ,
             options: {
-              
               urls: configService.get('NOTIFY_URL'),
 
               queue: configService.get('NOTIFY_QUEUE'),
