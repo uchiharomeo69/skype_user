@@ -31,6 +31,7 @@ import { UserService } from './user.service';
               queue: configService.get('NOTIFY_QUEUE'),
               queueOptions: {
                 durable: false,
+                messageTtl: 40000,
               },
             },
           };
