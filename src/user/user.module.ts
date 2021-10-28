@@ -27,7 +27,7 @@ import { UserService } from './user.service';
             transport: Transport.RMQ,
             options: {
               urls: configService.get('NOTIFY_URL'),
-
+              noAck: true,
               queue: configService.get('NOTIFY_QUEUE'),
               queueOptions: {
                 durable: false,
