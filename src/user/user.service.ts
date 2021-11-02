@@ -72,7 +72,7 @@ export class UserService {
   async create(user: CreateUser) {
     let active = false;
     let activeCode = this.jwtService.sign(user.email);
-    const randomId = Math.trunc(Math.random() * 1000);
+    const randomId = Math.trunc(Math.random() * 600);
     const avatar = `https://picsum.photos/id/${randomId}/300/300`;
     this.client.emit('register', {
       name: user.name,
